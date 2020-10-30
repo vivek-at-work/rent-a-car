@@ -71,6 +71,21 @@ PER_KILOMETER_PRICE = os.environ.get('CRS_PER_KILOMETER_PRICE', 2)
 3.  Users can select a car and can provide its booking start date.
 4.  User can close his booking by providing closing time and last milage of the car and once he closes that booking he will be displayed the total payable amount for that particular booking.
 
+## OUR CI WORKFLOW
+
+    [Click me to see how out last commit worked](https://github.com/vivek-at-work/rent-a-car/actions)
+
 ## DEV SETUP
 
+    ### Prerequisites : Linux , pipenv
+    1. git clone https://github.com/vivek-at-work/rent-a-car.git
+    2. cd rent-a-car/
+    3. pipenv install
+    4. pipenv shell
+    5. cd car_rental_service
+    6. python manage.py migrate
+    7. python manage.py runserver 8001
+
 ## REST API DOCUMENTATION
+
+    [Click me to see know abow our rest apis](http://localhost:8001/api/schema/swagger-ui/#/)
