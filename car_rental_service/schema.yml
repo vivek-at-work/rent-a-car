@@ -1,0 +1,740 @@
+openapi: 3.0.3
+info:
+  title: Car Rental Service
+  version: 1.0.0
+  description: Car Rental Service enables us with renting a car and track it's booking
+    history and monitor its availability for next bookings.
+paths:
+  /api/schema/:
+    get:
+      operationId: api_schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/v1/bookings/:
+    get:
+      operationId: api_v1_bookings_list
+      description: |-
+        Read Only Model view set for listing down booking  and close a booking
+        A Customer can only view booking that he owns
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Booking'
+          description: ''
+  /api/v1/bookings/{id}/:
+    get:
+      operationId: api_v1_bookings_retrieve
+      description: |-
+        Read Only Model view set for listing down booking  and close a booking
+        A Customer can only view booking that he owns
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this booking.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+          description: ''
+  /api/v1/bookings/{id}/close/:
+    post:
+      operationId: api_v1_bookings_close_create
+      description: |-
+        Custom action to be called when a customer wants to
+        close his booking for a car.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this booking.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingClose'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BookingClose'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BookingClose'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingClose'
+          description: ''
+  /api/v1/cars/:
+    get:
+      operationId: api_v1_cars_list
+      description: Model view set for car listing and booking
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Car'
+          description: ''
+    post:
+      operationId: api_v1_cars_create
+      description: Model view set for car listing and booking
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Car'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Car'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Car'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+          description: ''
+  /api/v1/cars/{id}/:
+    get:
+      operationId: api_v1_cars_retrieve
+      description: Model view set for car listing and booking
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this car.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+          description: ''
+    put:
+      operationId: api_v1_cars_update
+      description: Model view set for car listing and booking
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this car.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Car'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Car'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Car'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+          description: ''
+    patch:
+      operationId: api_v1_cars_partial_update
+      description: Model view set for car listing and booking
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this car.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCar'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCar'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCar'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+          description: ''
+    delete:
+      operationId: api_v1_cars_destroy
+      description: Model view set for car listing and booking
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this car.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/cars/{id}/rent/:
+    post:
+      operationId: api_v1_cars_rent_create
+      description: rent action to renting a car
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this car.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RentACar'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RentACar'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RentACar'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RentACar'
+          description: ''
+  /api/v1/customers/:
+    get:
+      operationId: api_v1_customers_list
+      description: Read Only Model view set for customer listing and registration
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+          description: ''
+  /api/v1/customers/{id}/:
+    get:
+      operationId: api_v1_customers_retrieve
+      description: Read Only Model view set for customer listing and registration
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this customer.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+          description: ''
+  /api/v1/customers/register/:
+    post:
+      operationId: api_v1_customers_register_create
+      description: |-
+        Custom action for customer sign up
+        using name, date of birth, contact number and password
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUp'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SignUp'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SignUp'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignUp'
+          description: ''
+  /api/v1/login/:
+    post:
+      operationId: api_v1_login_create
+      description: ''
+      tags:
+      - api
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+          description: ''
+components:
+  schemas:
+    AuthToken:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        token:
+          type: string
+          readOnly: true
+      required:
+      - password
+      - token
+      - username
+    Booking:
+      type: object
+      description: BookingSerializer is used for serializing booking or  list of bookings.
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        car:
+          type: string
+          format: uri
+          description: Car for which this booking is done.
+        customer:
+          type: string
+          format: uri
+          description: Customer who owns this booking.
+        valid_from:
+          type: string
+          format: date-time
+          description: Time Stamp after which booking is valid.
+        initial_milage:
+          type: number
+          format: float
+          description: Represents the initial milage of the car at the time of booking.
+        applicable_base_rental_rate:
+          type: number
+          format: float
+          description: Applicable Base Rental Rate at which the booking was done.
+        applicable_par_kilometer_price:
+          type: number
+          format: float
+          description: Applicable Par Kilometer Price at which the booking was done.
+        booking_number:
+          type: string
+          description: A human readable unique identifier this booking.
+          maxLength: 10
+        returned_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: DateTime stamp at which the car was returned and booking was
+            closed.
+        last_milage:
+          type: number
+          format: float
+          nullable: true
+          description: Represents the last milage of the car at return during this
+            booking.
+        payable_amount:
+          type: number
+          format: float
+          nullable: true
+          description: Total Payable Amount for this booking.
+        is_closed:
+          type: boolean
+          readOnly: true
+      required:
+      - applicable_base_rental_rate
+      - applicable_par_kilometer_price
+      - booking_number
+      - car
+      - customer
+      - initial_milage
+      - is_closed
+      - url
+      - valid_from
+    BookingClose:
+      type: object
+      description: |-
+        BookingCloseSerializer is used for validating the payload
+        while user returns the car.
+      properties:
+        returned_at:
+          type: string
+          format: date-time
+        last_milage:
+          type: number
+          format: float
+      required:
+      - last_milage
+      - returned_at
+    Car:
+      type: object
+      description: Car Hyperlinked Model Serializer used for Car listing
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        number:
+          type: string
+          description: An human readable unique identifier or number for this car.
+          maxLength: 10
+        category:
+          $ref: '#/components/schemas/CategoryEnum'
+        is_hired:
+          type: boolean
+          description: Represents this car is currently hired if set to true otherwise
+            false
+          readOnly: true
+        current_milage:
+          type: number
+          format: float
+          description: Represents the current milage of the car
+      required:
+      - category
+      - current_milage
+      - is_hired
+      - number
+      - url
+    CategoryEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      type: integer
+    Customer:
+      type: object
+      description: Customer Hyperlinked Model Serializer used for customer listing
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        contact_number:
+          type: string
+          description: Contact Numbers that should start with one of [789] and max
+            length to be 10 digits
+          maxLength: 10
+        name:
+          type: string
+          maxLength: 255
+        date_of_birth:
+          type: string
+          format: date
+          description: Date of birth of customer validation to check if user is above
+            18 years of age.
+        is_staff:
+          type: boolean
+      required:
+      - contact_number
+      - date_of_birth
+      - name
+      - url
+    PatchedCar:
+      type: object
+      description: Car Hyperlinked Model Serializer used for Car listing
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        number:
+          type: string
+          description: An human readable unique identifier or number for this car.
+          maxLength: 10
+        category:
+          $ref: '#/components/schemas/CategoryEnum'
+        is_hired:
+          type: boolean
+          description: Represents this car is currently hired if set to true otherwise
+            false
+          readOnly: true
+        current_milage:
+          type: number
+          format: float
+          description: Represents the current milage of the car
+    RentACar:
+      type: object
+      properties:
+        valid_from:
+          type: string
+          format: date-time
+      required:
+      - valid_from
+    SignUp:
+      type: object
+      description: Sign Up Serializer used for customer sign up request validation
+      properties:
+        contact_number:
+          type: string
+        name:
+          type: string
+        date_of_birth:
+          type: string
+          format: date
+        password:
+          type: string
+      required:
+      - contact_number
+      - date_of_birth
+      - name
+      - password
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: Session
+    tokenAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Bearer
