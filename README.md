@@ -91,3 +91,4 @@ PER_KILOMETER_PRICE = os.environ.get('CRS_PER_KILOMETER_PRICE', 2)
 
     Follow this link to know about our rest apis
      http://localhost:8001/api/schema/swagger-ui/#/
+![Our API Docs](/vivek-at-work/rent-a-car/blob/main/our_api_doc.JPG?raw=true "We Use Swagger")
