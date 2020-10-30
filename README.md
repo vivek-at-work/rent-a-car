@@ -72,6 +72,7 @@ PER_KILOMETER_PRICE = os.environ.get('CRS_PER_KILOMETER_PRICE', 2)
 4.  User can close his booking by providing closing time and last milage of the car and once he closes that booking he will be displayed the total payable amount for that particular booking.
 
 ## OUR CI WORKFLOW
+
     Follow this link to how our last commit worked
     https://github.com/vivek-at-work/rent-a-car/actions
 
@@ -87,5 +88,6 @@ PER_KILOMETER_PRICE = os.environ.get('CRS_PER_KILOMETER_PRICE', 2)
     7. python manage.py runserver 8001
 
 ## REST API DOCUMENTATION
+
     Follow this link to know about our rest apis
      http://localhost:8001/api/schema/swagger-ui/#/
