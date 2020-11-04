@@ -41,3 +41,9 @@ class CustomersViewSet(viewsets.ReadOnlyModelViewSet):
                 serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_superuser or user.is_staff:
+            return CUSTOMER.objects.all()
+        return self.queryset.filter(contact_number=user.contact_number)

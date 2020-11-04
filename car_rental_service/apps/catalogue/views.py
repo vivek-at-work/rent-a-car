@@ -5,6 +5,7 @@ from bookings.serializers import BookingSerializer
 from calculators import booking_number_generator
 from catalogue.models import Car
 from django.db import IntegrityError, transaction
+from django.utils.translation import gettext_lazy as _
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -28,6 +29,12 @@ class CarViewSet(viewsets.ModelViewSet):
     serializer_class = CarSerializer
     # READ ONLY FOR CUSTOMERS
     permission_classes = [permissions.IsAdminUser | ReadOnly]
+
+    def list(self, request):
+        if request.user.is_superuser:
+            return CarSerializer(Car.objects.all(), many=True, context={'request': request})
+        return super(CarViewSet, self).list(request)
+
 
     @action(
         detail=True,
@@ -83,3 +90,11 @@ class CarViewSet(viewsets.ModelViewSet):
                 serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST,
             )
+    def destroy(self, request, pk=None):
+        car = self.get_object()
+        if car.is_hired:
+            return Response(
+                    {'error': _('You can not delete a car  if a booking is in progress.')},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                )
+        return super(CarViewSet,self).destroy(request, pk)
